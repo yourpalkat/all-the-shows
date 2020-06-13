@@ -1,0 +1,60 @@
+scalar Date
+
+# type User {
+#   id: ID!
+#   username: String!
+#   password: String!
+#   shows: [Show]
+# }
+
+# For now, let's keep this as simple as possible
+type Show {
+  id: ID!
+  performer: String!
+  openers: [String]
+  venue: String!
+  date: Date!
+}
+
+# Eventually we'll migrate to this, which is more extensible
+# type Show {
+#   id: ID!
+#   performer: Performer!
+#   openers: [Performer]
+#   venue: Venue!
+#   date: Date!
+# }
+
+# type Performer {
+#   id: ID!
+#   name: String!
+# }
+
+# type Venue {
+#   id: ID!
+#   name: String!
+#   city: String!
+# }
+
+type Query {
+  showById: Show
+  allShows: [Show]
+  # also, eventually, allShowsByVenue: [Show] and allShowsByPerformer: [Show]
+}
+
+input addShowInput {
+  # Headline performer, a string for now, required
+  performer: String!
+  # Opening acts, an array of strings, not required
+  openers: [String]
+  # Venue is a string for now, required
+  venue: String!
+  # Date should be provided as a string of format YYYY-MM-DD, required
+  dateProvided: String!
+}
+
+type Mutation {
+  addShow(
+    input: addShowInput!
+  ): Show
+}
