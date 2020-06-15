@@ -19,14 +19,22 @@ function AllShows() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
   
-  return data.allShows.map((show) => (
-    <div key={show.id}>
-      <h2>
-        {show.performer}
-      </h2>
-      <p>{show.venue}</p>
+  return (
+    <div className="wrapper">
+      <h1>Testing Apollo Client</h1>
+      {
+        data.allShows.map((show) => (
+          <div key={show.id}>
+            <h2>
+              {show.performer}
+            </h2>
+            <p>{show.venue}</p>
+          </div>
+        ))
+      }
     </div>
-  ));
+  );
+  
 }
 
 export default AllShows;

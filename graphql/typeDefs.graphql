@@ -7,12 +7,16 @@ scalar Date
 #   shows: [Show]
 # }
 
-# For now, let's keep this as simple as possible
+# Slightly more complex version of the Show object that links to Performers
 type Show {
   id: ID!
-  performer: String!
+  # Each show has one headline perfomer, a Performer object, required
+  performer: Performer!
+  # Each show can have multiple opening acts, an array of Performer objects, not required
   openers: [String]
+  # Venue is a string for now, required
   venue: String!
+  # Show date is the custom scalar Date, required
   date: Date!
 }
 
@@ -25,10 +29,11 @@ type Show {
 #   date: Date!
 # }
 
-# type Performer {
-#   id: ID!
-#   name: String!
-# }
+type Performer {
+  id: ID!
+  shows: [Show]
+  name: String!
+}
 
 # type Venue {
 #   id: ID!
@@ -39,12 +44,14 @@ type Show {
 type Query {
   showById: Show
   allShows: [Show]
+  performerById: Performer
+  allPerformers: [Performer]
   # also, eventually, allShowsByVenue: [Show] and allShowsByPerformer: [Show]
 }
 
 input addShowInput {
-  # Headline performer, a string for now, required
-  performer: String!
+  # Headline performer, a Performer object, required
+  performer: addPerformerInput!
   # Opening acts, an array of strings, not required
   openers: [String]
   # Venue is a string for now, required
@@ -53,8 +60,18 @@ input addShowInput {
   dateProvided: String!
 }
 
+input addPerformerInput {
+  # Name of the performer, a string, require
+  name: String!
+  # Shows the performer has been in, an array of Show objects, not required
+  shows: [addShowInput]
+}
+
 type Mutation {
   addShow(
     input: addShowInput!
   ): Show
+  addPerformer(
+    input: addPerformerInput!
+  ): Performer
 }

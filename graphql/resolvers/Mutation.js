@@ -15,5 +15,19 @@ module.exports = {
     };
     await shows.insertOne(newShow);
     return newShow;
+  },
+
+  async addPerformer(
+    parent,
+    { input: { name, shows }},
+    { performers }
+  ) {
+    const newPerformer = {
+      id: generate(),
+      name,
+      shows
+    };
+    await performers.insertOne(newPerformer);
+    return newPerformer;
   }
 };

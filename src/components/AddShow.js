@@ -2,6 +2,23 @@ import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 
+const ADD_PERFORMER = gql`
+  mutation addPerformer(
+    $name: String!
+    $shows: [Show]
+  ) {
+    addPerformer(input: {
+      name: $name
+      shows: $shows
+      }
+    ) {
+      id
+      name
+      shows
+    }
+  }
+`;
+
 const ADD_SHOW = gql`
   mutation AddShow(
     $performer: String!
@@ -46,7 +63,7 @@ const AddShow = () => {
   };
 
   return (
-    <div>
+    <div className="wrapper">
       <form onSubmit={e => handleFormSubmit(e)}>
         <label htmlFor="performer">Headline act:</label>
         <input type="text" id="performer" name="performer" value={performer} onChange={e => setPerformer(e.target.value)} />

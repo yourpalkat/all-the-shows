@@ -1,19 +1,20 @@
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AllShows from './components/AllShows';
 import AddShow from './components/AddShow';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Testing Apollo Client.
-        </p>
-        <AllShows />
-      </header>
-      <AddShow />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <AllShows />
+        </Route>
+        <Route path="/add">
+          <AddShow />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
