@@ -1,28 +1,12 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-
-const ADD_PERFORMER = gql`
-  mutation addPerformer(
-    $name: String!
-    $shows: [Show]
-  ) {
-    addPerformer(input: {
-      name: $name
-      shows: $shows
-      }
-    ) {
-      id
-      name
-      shows
-    }
-  }
-`;
+import { Redirect, NavLink } from 'react-router-dom';
 
 const ADD_SHOW = gql`
   mutation AddShow(
     $performer: String!
-    $openers: [String]
+    $openers: String
     $venue: String!
     $date: String!
   ) {
@@ -44,26 +28,28 @@ const ADD_SHOW = gql`
 
 
 const AddShow = () => {
-  const [addShow, { data }] = useMutation(ADD_SHOW);
+  const [addShow, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_SHOW);
   const [performer, setPerformer] = useState('');
   const [openers, setOpeners] = useState('');
   const [venue, setVenue] = useState('');
   const [date, setDate] = useState('');
+  const [redirect, setRedirect] = useState(false);
   
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const openersArray = [openers];
-    addShow({ 
-      variables: { performer, openers: openersArray, venue, date } 
+    await addShow({ 
+      variables: { performer, openers, venue, date } 
     });
     setPerformer('');
     setOpeners('');
     setVenue('');
     setDate('');
+    setRedirect(true);
   };
 
   return (
     <div className="wrapper">
+      {redirect && <Redirect to="/" />}
       <form onSubmit={e => handleFormSubmit(e)}>
         <label htmlFor="performer">Headline act:</label>
         <input type="text" id="performer" name="performer" value={performer} onChange={e => setPerformer(e.target.value)} />
@@ -74,6 +60,9 @@ const AddShow = () => {
         <label htmlFor="date">Date:</label>
         <input type="date" id="date" name="date" pattern="\d{4}-\d{2}-\d{2}" value={date} onChange={e => setDate(e.target.value)}/>
         <button type='submit'>Add Show</button>
+        <NavLink to="/">Cancel</NavLink>
+        {mutationLoading && <p>Loading...</p>}
+        {mutationError && <p>Error! Please try again.</p>}
       </form>
     </div>
   );

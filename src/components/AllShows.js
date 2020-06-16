@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import { NavLink } from 'react-router-dom';
 
 const ALL_SHOWS = gql`
   {
@@ -13,6 +14,8 @@ const ALL_SHOWS = gql`
     }
   }
 `;
+
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 function AllShows() {
   const { loading, error, data } = useQuery(ALL_SHOWS);
@@ -28,10 +31,13 @@ function AllShows() {
             <h2>
               {show.performer}
             </h2>
+            {show.openers && <h3>{show.openers}</h3>}
             <p>{show.venue}</p>
+            <p>{new Date(show.date).toLocaleDateString('en-UK', options)}</p>
           </div>
         ))
       }
+      <NavLink to="/add">Add a show</NavLink>
     </div>
   );
   

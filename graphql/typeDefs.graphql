@@ -11,67 +11,33 @@ scalar Date
 type Show {
   id: ID!
   # Each show has one headline perfomer, a Performer object, required
-  performer: Performer!
-  # Each show can have multiple opening acts, an array of Performer objects, not required
-  openers: [String]
+  performer: String!
+  # Each show can have multiple opening acts, a String for now, not required
+  openers: String
   # Venue is a string for now, required
   venue: String!
   # Show date is the custom scalar Date, required
   date: Date!
 }
 
-# Eventually we'll migrate to this, which is more extensible
-# type Show {
-#   id: ID!
-#   performer: Performer!
-#   openers: [Performer]
-#   venue: Venue!
-#   date: Date!
-# }
-
-type Performer {
-  id: ID!
-  shows: [Show]
-  name: String!
-}
-
-# type Venue {
-#   id: ID!
-#   name: String!
-#   city: String!
-# }
-
 type Query {
   showById: Show
   allShows: [Show]
-  performerById: Performer
-  allPerformers: [Performer]
-  # also, eventually, allShowsByVenue: [Show] and allShowsByPerformer: [Show]
 }
 
 input addShowInput {
-  # Headline performer, a Performer object, required
-  performer: addPerformerInput!
-  # Opening acts, an array of strings, not required
-  openers: [String]
+  # Headline performer, a string, required
+  performer: String!
+  # Opening acts, a string, not required
+  openers: String
   # Venue is a string for now, required
   venue: String!
   # Date should be provided as a string of format YYYY-MM-DD, required
   dateProvided: String!
 }
 
-input addPerformerInput {
-  # Name of the performer, a string, require
-  name: String!
-  # Shows the performer has been in, an array of Show objects, not required
-  shows: [addShowInput]
-}
-
 type Mutation {
-  addShow(
+  addShow( 
     input: addShowInput!
   ): Show
-  addPerformer(
-    input: addPerformerInput!
-  ): Performer
 }

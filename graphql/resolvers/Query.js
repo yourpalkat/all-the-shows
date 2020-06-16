@@ -7,13 +7,5 @@ module.exports = {
   
   showById(parent, args, { shows }, info) {
     return shows.find(args.id);
-  },
-
-  allPerformers(parent, args, { performers }, info) {
-    return performers.find().toArray();
-  },
-
-  performerById(parent, args, { performers }, info) {
-    return performers.find(args.id);
   }
 }
