@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import Layout from './Layout';
 
 const ALL_SHOWS = gql`
   {
@@ -17,16 +18,21 @@ const ALL_SHOWS = gql`
 
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+`;
+
 function AllShows() {
   const { loading, error, data } = useQuery(ALL_SHOWS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
   
   return (
-    <div className="wrapper">
-      <h1>Testing Apollo Client</h1>
-      {
-        data.allShows.map((show) => (
+    <Layout>
+      <GridContainer>
+        { data.allShows.map((show) => (
           <div key={show.id}>
             <h2>
               {show.performer}
@@ -35,10 +41,9 @@ function AllShows() {
             <p>{show.venue}</p>
             <p>{new Date(show.date).toLocaleDateString('en-UK', options)}</p>
           </div>
-        ))
-      }
-      <NavLink to="/add">Add a show</NavLink>
-    </div>
+        )) }
+      </GridContainer>
+    </Layout>
   );
   
 }
