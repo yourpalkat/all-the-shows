@@ -1,11 +1,11 @@
 scalar Date
 
-# type User {
-#   id: ID!
-#   username: String!
-#   password: String!
-#   shows: [Show]
-# }
+type User {
+  id: ID!
+  username: String!
+  password: String!
+  # shows: [Show]
+}
 
 # Slightly more complex version of the Show object that links to Performers
 type Show {
@@ -25,6 +25,16 @@ type Query {
   allShows: [Show]
 }
 
+"""
+When we create a user, we must send `username`, and `password` to the `createUser` mutation. This input type wraps those fields into one object.
+"""
+input CreateUserInput {
+  # A User's unique user name.
+  username: String!
+  # A User's password.
+  password: String!
+}
+
 input addShowInput {
   # Headline performer, a string, required
   performer: String!
@@ -36,8 +46,44 @@ input addShowInput {
   dateProvided: String!
 }
 
+"""
+When a `User` logs in, they get their token and customer information from this `LogInPayload` type. This is how user authentication is handled.
+"""
+type LogInPayload {
+  "The entire `User` object for the recently logged in individual."
+  user: User
+  "The authorization token that can be used to run queries and mutations that require login."
+  token: String!
+}
+
+"""
+When a new user is created, this object will be returned from the `createUser` mutation.
+"""
+type CreateUserPayload {
+  # The entire `User` object for the recently registered individual.
+  user: User
+  # A welcome message to the new `User` encouraging them to log in.
+  message: String
+}
+
 type Mutation {
   addShow( 
     input: addShowInput!
   ): Show
+  """
+  When you need to create a user, you'll need to send this mutation.
+  """
+  createUser(
+    # REQUIRED: Send `username` and `password` as arguments
+    input: createUserInput!
+  ): CreateUserPayload!
+  """
+  A mutation used to log in a registered user. If you haven't created an account yet, start with the createUser mutation.
+  """
+  logIn(
+    # REQUIRED: Send your unique `username` as an argument to log in
+    username: String!
+    # REQUIRED: Send your `password` as an argument to log in
+    password: String!
+  ): LogInPayload!
 }

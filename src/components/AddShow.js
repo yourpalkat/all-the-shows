@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Redirect, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Layout from './Layout';
@@ -47,7 +47,7 @@ const Input = styled.input`
 `;
 
 const AddShow = () => {
-  const [addShow, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_SHOW);
+  const [addNewShow, { loading: mutationLoading, error: mutationError, data }] = useMutation(ADD_SHOW);
   const [performer, setPerformer] = useState('');
   const [openers, setOpeners] = useState('');
   const [venue, setVenue] = useState('');
@@ -56,9 +56,12 @@ const AddShow = () => {
   
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await addShow({ 
+    const client = new useApolloClient();
+    await addNewShow({ 
       variables: { performer, openers, venue, date } 
     });
+    console.log(data);
+    // client.writeData({ data: data });
     setPerformer('');
     setOpeners('');
     setVenue('');
