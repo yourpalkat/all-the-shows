@@ -41,8 +41,8 @@ module.exports = {
     }
   },
 
-  async logIn(parent, { username, password }, { customers, currentUser }) {
-    let user = await customers.findOne({ username });
+  async logIn(parent, { username, password }, { users, currentUser }) {
+    let user = await users.findOne({ username });
     if (!user) {
       throw new Error(`Account with that username: ${username} not found.`);
     }

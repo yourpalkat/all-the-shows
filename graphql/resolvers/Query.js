@@ -5,7 +5,11 @@ module.exports = {
     return allShowsArray;
   },
   
-  showById(parent, args, { shows }, info) {
-    return shows.find(args.id);
+  showById(parent, { id }, { shows }, info) {
+    return shows.findOne({ id });
+  },
+
+  userById(parent, { id }, { users }, info) {
+    return users.findOne({ id });
   }
 }

@@ -7,7 +7,7 @@ type User {
   # shows: [Show]
 }
 
-# Slightly more complex version of the Show object that links to Performers
+# Slightly more complex version of the Show object
 type Show {
   id: ID!
   # Each show has one headline perfomer, a Performer object, required
@@ -21,8 +21,9 @@ type Show {
 }
 
 type Query {
-  showById: Show
+  showById(id: ID!): Show
   allShows: [Show]
+  userById(id: ID!): User
 }
 
 """
@@ -35,7 +36,7 @@ input CreateUserInput {
   password: String!
 }
 
-input addShowInput {
+input AddShowInput {
   # Headline performer, a string, required
   performer: String!
   # Opening acts, a string, not required
@@ -68,14 +69,14 @@ type CreateUserPayload {
 
 type Mutation {
   addShow( 
-    input: addShowInput!
+    input: AddShowInput!
   ): Show
   """
   When you need to create a user, you'll need to send this mutation.
   """
   createUser(
     # REQUIRED: Send `username` and `password` as arguments
-    input: createUserInput!
+    input: CreateUserInput!
   ): CreateUserPayload!
   """
   A mutation used to log in a registered user. If you haven't created an account yet, start with the createUser mutation.
