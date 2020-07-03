@@ -51,11 +51,15 @@ const Signup = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await createUser({ variables: { username, password }});
-    console.log(data);
-    setUsername('');
-    setPassword('');
-    setRedirect(true);
+    try {
+      await createUser({ variables: { username, password }});
+      console.log(data);
+      setUsername('');
+      setPassword('');
+      setRedirect(true);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   return (

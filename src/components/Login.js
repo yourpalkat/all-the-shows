@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import { Redirect, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Layout from './Layout';
 
-const LOG_IN = gql``;
+const LOG_IN = gql`
+  mutation LogIn(
+    $username: String!
+    $password: String!
+  ) {
+    logIn( 
+      username: $username
+      password: $password
+    ) {
+      user {
+        id
+        username
+        password
+      }
+      token
+    }
+  }
+`;
 
 const GridContainer = styled.div`
   display: grid;
@@ -28,9 +46,18 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const [logIn, { loading: mutationLoading, error: mutationError }] = useMutation(LOG_IN);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    let result;
+    try {
+      result = await logIn({ variables: { username, password } });
+      console.log(result.data.logIn.user, result.data.logIn.token);
+      setRedirect(true);
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -62,9 +89,9 @@ const Login = () => {
 
         <button type='submit'>Sign in</button>
         <NavLink to="/">Cancel</NavLink>
-        <p>Don't have an account? <NavLink to="/login">Sign up.</NavLink></p>
+        <p>Don't have an account? <NavLink to="/signup">Sign up.</NavLink></p>
         {mutationLoading && <p>Loading...</p>}
-        {mutationError && <p>Error! Please try again.</p>}
+        {mutationError && <p>Sorry! That username or password was incorrect.</p>}
 
       </form>
     </Layout>

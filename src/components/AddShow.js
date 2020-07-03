@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
-import { useMutation, useApolloClient } from '@apollo/react-hooks';
+// import { useMutation, useApolloClient } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { Redirect, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Layout from './Layout';
@@ -48,6 +49,20 @@ const Input = styled.input`
 
 const AddShow = () => {
   const [addNewShow, { loading: mutationLoading, error: mutationError, data }] = useMutation(ADD_SHOW);
+  // for reference: may have to update cache after creating new show object
+  // const [addTodo] = useMutation(
+  //   ADD_TODO,
+  //   {
+  //     update(cache, { data: { addTodo } }) {
+  //       const { todos } = cache.readQuery({ query: GET_TODOS });
+  //       cache.writeQuery({
+  //         query: GET_TODOS,
+  //         data: { todos: todos.concat([addTodo]) },
+  //       });
+  //     }
+  //   }
+  // );
+
   const [performer, setPerformer] = useState('');
   const [openers, setOpeners] = useState('');
   const [venue, setVenue] = useState('');
@@ -56,7 +71,7 @@ const AddShow = () => {
   
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const client = new useApolloClient();
+    // const client = new useApolloClient();
     await addNewShow({ 
       variables: { performer, openers, venue, date } 
     });
