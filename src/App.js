@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
 import AllShows from './components/AllShows';
 import AddShow from './components/AddShow';
 import Signup from './components/Signup';
@@ -12,14 +13,14 @@ function App() {
         <Route exact path="/">
           <AllShows />
         </Route>
-        <Route path="/add">
+        <PrivateRoute path="/add">
           <AddShow />
+        </PrivateRoute>
+        <Route path="/login">
+          <Login />
         </Route>
         <Route path="/signup">
           <Signup />
-        </Route>
-        <Route path="/login">
-          <Login />
         </Route>
       </Switch>
     </Router>

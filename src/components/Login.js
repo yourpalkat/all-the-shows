@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Redirect, NavLink } from 'react-router-dom';
+import { setToken } from '../services/tokenService';
 import styled from 'styled-components';
 import Layout from './Layout';
 
@@ -53,6 +54,7 @@ const Login = () => {
     let result;
     try {
       result = await logIn({ variables: { username, password } });
+      setToken(result.data.logIn.token);
       console.log(result.data.logIn.user, result.data.logIn.token);
       setRedirect(true);
     } catch(error) {
